@@ -2,7 +2,10 @@
 set -e
 
 download_idea() {
-  wget --no-verbose -O /tmp/idea.tar.gz https://download.jetbrains.com/idea/ideaIC-$idea_version.tar.gz
+  local prefix="idea"
+  [[ "$(printf '%s\n' "2025.3" "$idea_version" | sort -V | head -1)" != "2025.3" ]] && prefix="ideaIC"
+
+  wget --no-verbose -O /tmp/idea.tar.gz "https://download.jetbrains.com/idea/${prefix}-${idea_version}.tar.gz"
   mkdir -p "$IDEA_DIR"
   tar xzf /tmp/idea.tar.gz -C "$IDEA_DIR" --strip-components=1
   rm /tmp/idea.tar.gz
