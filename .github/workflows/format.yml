@@ -1,4 +1,4 @@
-name: IntelliJ Test Format
+name: Test IDEA Format
 
 on:
   push:

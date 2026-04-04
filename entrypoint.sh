@@ -5,16 +5,15 @@ download_idea() {
   local prefix="idea"
   [[ "$(printf '%s\n' "2025.3" "$idea_version" | sort -V | head -1)" != "2025.3" ]] && prefix="ideaIC"
 
-  wget --no-verbose -O /tmp/idea.tar.gz "https://download.jetbrains.com/idea/${prefix}-${idea_version}.tar.gz"
   mkdir -p "$IDEA_DIR"
-  tar xzf /tmp/idea.tar.gz -C "$IDEA_DIR" --strip-components=1
-  rm /tmp/idea.tar.gz
+  curl -sSL "https://download.jetbrains.com/idea/${prefix}-${idea_version}.tar.gz" | \
+    tar xz -C "$IDEA_DIR" --strip-components=1
 }
 
 check_idea_version() {
   if [[ -d "$IDEA_DIR/bin" ]]; then
     local output
-    output=$(IDEA_JDK="/usr/lib/jvm/java-17-openjdk" "$IDEA_DIR/bin/idea.sh" --version 2>/dev/null || true)
+    output=$(IDEA_JDK="/usr/lib/jvm/java-21-openjdk" "$IDEA_DIR/bin/idea.sh" --version 2>/dev/null || true)
     if [[ "$output" == *"$idea_version"* ]]; then
       echo "Valid IntelliJ IDEA version found."
       echo "Using cached files at $IDEA_DIR."
@@ -74,8 +73,8 @@ echo "files-changed=$changed_files_count" >> $GITHUB_OUTPUT
 if [[ $changed_files_count -gt 0 ]]; then
   echo "Files changed by formatter:"
   echo "$changed_files"
-  git config user.name "GitHub"
-  git config user.email "noreply@github.com"
+  git config user.name "github-actions[bot]"
+  git config user.email "github-actions[bot]@users.noreply.github.com"
   if [[ "$push_type" == "commit" ]]; then
     git commit --all -m "$push_title" --author="github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
     git push

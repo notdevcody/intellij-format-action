@@ -4,40 +4,16 @@ A GitHub Action that formats your code using the IntelliJ formatter.
 
 ## Examples
 
-Both examples implement caching of downloaded IDEA files (~900MB). <br>
+Both examples implement caching of downloaded IDE files.
 Cache generation might take a while on the first run, but saves bandwidth and is faster later on. <br>
 **NOTE: If the actions fails due to the formatting changing files, cache will not be saved.**
 
-Formats all files that are supported by the formatter in your repository and creates a pull request with the changes whenever there's a push to the `main` branch:
-
-```yaml
-name: IntelliJ Format
-
-on:
-  push:
-    branches: ["main"]
-
-jobs:
-  formatting:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-      - name: Cache IDEA
-        uses: actions/cache@v5
-        with:
-          path: /home/runner/work/_temp/_github_workflow/idea-cache
-          key: ${{ runner.os }}-idea-cache
-      - uses: notdevcody/intellij-format-action@latest
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-```
-
 ---
 
-Formats all files that are supported by the formatter in your repository and creates a pull request whenever there's a push to the `main` branch, including PRs to it:
+Formats all files that are supported by the formatter in your repository and creates a pull request whenever there's a push to the `main` branch, including pull requests to it:
 
 ```yaml
-name: IntelliJ Format
+name: IDEA Format
 
 on:
   push:
@@ -60,17 +36,17 @@ jobs:
         with:
           path: /home/runner/work/_temp/_github_workflow/idea-cache
           key: ${{ runner.os }}-idea-cache
-      - uses: notdevcody/intellij-format-action@latest
+      - uses: notdevcody/intellij-format-action@v4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 ---
 
-Formats all files that are supported by the formatter in your repository and directly commits the changes whenever there's a push to the `main` branch:
+Formats all files that are supported by the formatter in your repository and directly commits the changes whenever there's a push to the `main` branch, including pull requests to it:
 
 ```yaml
-name: IntelliJ Format
+name: IDEA Format
 
 on:
   push:
@@ -93,8 +69,9 @@ jobs:
         with:
           path: /home/runner/work/_temp/_github_workflow/idea-cache
           key: ${{ runner.os }}-idea-cache
-      - uses: notdevcody/intellij-format-action@latest
-        push-type: "commit"
+      - uses: notdevcody/intellij-format-action@v4
+        with:
+          push-type: "commit"
 ```
 
 ## Inputs

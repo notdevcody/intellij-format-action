@@ -52,7 +52,7 @@ outputs:
     description: Zero if none changed, greater if at least one file was formatted.
 runs:
   using: docker
-  image: Dockerfile
+  image: docker://ghcr.io/notdevcody/intellij-format-action:v4.0.0
   args:
     - ${{ inputs.idea-version }}
     - ${{ inputs.path }}
